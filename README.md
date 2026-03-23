@@ -13,8 +13,8 @@ Gestion locale de file d’attente pour clinique dentaire : accueil, salles, aff
 
 ## Installation
 ```bash
-git clone https://example.com/clinic-queue.git
-cd clinic-queue
+git clone https://github.com/boobacar/clinic-queue-v2.git
+cd clinic-queue-v2
 npm install
 npm run build   # construit le frontend (client/dist)
 ```
@@ -59,14 +59,24 @@ Socket.io émet `call` `{ticketId, nom, prenom, roomId, calledAt}` sur chaque ap
 - Table `patients_queue` avec colonnes (ticket_id, nom, prenom, motif, arrival_time, status, called_room, called_time, last_called).
 
 ## Service systemd
-Copiez le service et activez-le pour démarrage automatique :
+Copiez le service backend et activez-le :
 ```bash
 sudo cp systemd/clinic-queue.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable clinic-queue
 sudo systemctl start clinic-queue
 ```
-Chemin par défaut : `/home/pi/clinic-queue`. Adaptez `User`, `Group`, `WorkingDirectory` dans `systemd/clinic-queue.service` si besoin.
+
+Pour lancer l’écran TV automatiquement en kiosk Chromium (Pi branché en HDMI), activez aussi :
+```bash
+chmod +x scripts/start-kiosk.sh
+sudo cp systemd/clinic-queue-display-kiosk.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable clinic-queue-display-kiosk
+sudo systemctl start clinic-queue-display-kiosk
+```
+
+Chemin par défaut : `/home/pi/clinic-queue-v2`. Adaptez `User`, `Group`, `WorkingDirectory` et chemins ExecStart dans les fichiers systemd si besoin.
 
 ## Audio/TTS
 - Carillon : `server/assets/chime.mp3` joué avant la voix.
@@ -89,6 +99,7 @@ aplay /tmp/test.wav
 - Mode Salle (1 ou 2) : boutons SUIVANT (retry automatique 2x sur échec réseau), RAPPELER (ré-annonce audio) et ABSENT/SKIP, affichage du dernier patient appelé.
 - Mode Affichage : écran TV/tablette, met à jour en temps réel via socket.io, montre appel en cours et historique des 3 derniers.
 - Version V2 optimisée Pi Zero 2 W : écran `Display` allégé (sans galerie/météo/animations lourdes) pour fluidité en kiosk.
+- Les assets galerie ont été retirés de V2 pour réduire la charge mémoire/CPU.
 
 ## Dépannage rapide
 - Vérifier l’IP : `curl http://localhost:3001/api/info`.

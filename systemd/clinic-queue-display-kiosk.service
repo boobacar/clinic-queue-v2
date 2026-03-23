@@ -1,0 +1,18 @@
+[Unit]
+Description=Clinic queue display kiosk (Chromium fullscreen)
+After=network-online.target clinic-queue.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+WorkingDirectory=/home/pi/clinic-queue-v2
+ExecStart=/home/pi/clinic-queue-v2/scripts/start-kiosk.sh http://localhost:3001/display
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

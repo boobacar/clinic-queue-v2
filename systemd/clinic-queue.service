@@ -5,8 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/pi/clinic-queue
-ExecStart=/usr/bin/node /home/pi/clinic-queue/server/index.js
+WorkingDirectory=/home/pi/clinic-queue-v2
+ExecStart=/usr/bin/node /home/pi/clinic-queue-v2/server/index.js
 Restart=always
 Environment=PORT=3001
 User=pi
